@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Prediction System</title>
+    <!-- CSS File -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Placement Prediction System</h1>
+        <p>Machine Learning Project using Flask</p>
+
+    </header>
+    <hr>
+    <!-- Navigation Menu -->
+    <nav>
+        <a href="/">Home</a> |
+        <a href="/dataset">Dataset</a> |
+        <a href="/eda">EDA</a> |
+        <a href="/preprocessing">Preprocessing</a> |
+        <a href="/models">Models</a> |
+        <a href="/evaluation">Evaluation</a> |
+        <a href="/comparison">Comparison</a> |
+        <a href="/prediction">Prediction</a>
+    </nav>
+    <hr>
+    <!-- Page Content -->
+    <div>
+        {% block content %}
+
+        {% endblock %}
+    </div>
+</body>
+</html>
