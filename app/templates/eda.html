@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="main-title">Exploratory Data Analysis (EDA)</h1>
+
+<div class="eda-grid">
+    <div class="eda-item">
+        <h3>CGPA Distribution</h3>
+        <img src="{{ url_for('results_images', filename='CGPA_Histogram.png') }}">
+    </div>
+
+    <div class="eda-item">
+        <h3>CGPA vs Aptitude Test Score</h3>
+        <img src="{{ url_for('results_images', filename='CGPA_vs_Aptitude_Test_Score.png') }}">
+    </div>
+
+    <div class="eda-item">
+        <h3>CGPA vs Placement Status</h3>
+        <img src="{{ url_for('results_images', filename='CGPA_vs_PlacementStatus.png') }}">
+    </div>
+
+    <div class="eda-item">
+        <h3>Correlation Heatmap</h3>
+        <img src="{{ url_for('results_images', filename='correlation_heatmap.png') }}">
+    </div>
+
+    <div class="eda-item">
+        <h3>Gender Distribution</h3>
+        <img src="{{ url_for('results_images', filename='Gender_Count.png') }}">
+    </div>
+
+    <div class="eda-item">
+        <h3>Placement Status Distribution</h3>
+        <img src="{{ url_for('results_images', filename='Placement_Status.png') }}">
+    </div>
+</div>
+{% endblock %}

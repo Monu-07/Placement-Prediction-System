@@ -88,3 +88,93 @@ footer {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
+/* Scoped content card */
+.content-card {
+    padding: 40px;
+    max-width: 1000px;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0px 6px 15px rgba(0,0,0,0.15);
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Scrollable dataset table */
+.scroll-table {
+    max-height: 400px;   /* adjust height as needed */
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    margin-top: 15px;
+}
+
+.scroll-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.scroll-table th, .scroll-table td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+.scroll-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.scroll-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* EDA Page Grid Layout */
+/* EDA Page Grid Layout */
+.eda-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+    gap: 30px;
+    width: 90%;
+    margin: auto;
+    padding: 20px;
+}
+
+.eda-item {
+    text-align: center;
+    padding: 20px;
+}
+
+.eda-item h3 {
+    color: #2c3e50;
+    font-size: 22px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.eda-item img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    border-radius: 10px;
+    border: 2px solid #ccc;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+}
+
+.eda-item img:hover {
+    transform: scale(1.05);
+    border-color: #1abc9c;
+}
+
+.main-title {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 36px;
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+
+/* Responsive tweak: stack into 1 column on small screens */
+@media (max-width: 768px) {
+    .eda-grid {
+        grid-template-columns: 1fr;
+    }
+}
