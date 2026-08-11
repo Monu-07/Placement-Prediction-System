@@ -26,11 +26,12 @@ def eda():
     return render_template("eda.html")
 
 # Serve images from results/images
-@app.route("/results/images/<path:filename>")
-def results_images(filename):
-    # Use absolute path to be safe
-    base_dir = os.path.join(os.path.dirname(__file__), "..", "results", "images")
+@app.route("/results/charts/<path:filename>")
+def results_charts(filename):
+    # Absolute path to Charts directory
+    base_dir = r"C:\Users\asolo\OneDrive\Documents\ML\Placement-Prediction-System\app\static\Charts"
     return send_from_directory(base_dir, filename)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

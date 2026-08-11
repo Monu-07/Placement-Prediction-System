@@ -5,7 +5,9 @@ import os
 import pandas as pd
 import seaborn as sns
 
-BASE_DIR = os.path.join("app", "static", "images")
+BASE_DIR = r"C:\Users\asolo\OneDrive\Documents\ML\Placement-Prediction-System\app\static\Charts"
+os.makedirs(BASE_DIR, exist_ok=True)
+
 os.makedirs(BASE_DIR, exist_ok=True)
 
 def basic_eda(df):
