@@ -29,7 +29,7 @@ def eda():
 @app.route("/results/charts/<path:filename>")
 def results_charts(filename):
     # Absolute path to Charts directory
-    base_dir = r"C:\Users\asolo\OneDrive\Documents\ML\Placement-Prediction-System\app\static\Charts"
+    base_dir = r"/App\static\Charts"
     return send_from_directory(base_dir, filename)
 
 
