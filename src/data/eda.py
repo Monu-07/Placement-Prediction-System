@@ -25,6 +25,7 @@ def basic_eda(df):
     print(df.duplicated())
     print("Null Values")
     print(df.isnull().sum())
+    print(df.columns)
     print(df["PlacementStatus"].value_counts())
     count = df["PlacementStatus"].value_counts()
     plt.figure(figsize=(5,6))

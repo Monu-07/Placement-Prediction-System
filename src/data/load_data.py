@@ -1,7 +1,7 @@
 import pandas as pd
 
 def load_data():
-    df=pd.read_csv("C:/Users/asolo/OneDrive/Documents/ML/Placement-Prediction-System/data/placement_data.csv")
+    df=pd.read_csv("C:/Users/asolo/Documents/ML/Placement-Prediction-System/data/placement_data.csv")
     return df
 def get_summary(df):
     return {

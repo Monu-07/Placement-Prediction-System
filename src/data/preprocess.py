@@ -5,15 +5,24 @@ from src.data.load_data import load_data
 import pandas as pd
 import os
 
-def split_data(df):
-    X = df.drop(columns=["PlacementStatus"])
-    y = df["PlacementStatus"]
+def split_data(df, target_column="PlacementStatus", drop_columns=None, stratify=True):
+    """
+    Splits dataset into train and test sets.
+    """
+    if drop_columns is None:
+        drop_columns = []
+
+    X = df.drop(columns=drop_columns + [target_column])
+    y = df[target_column]
+
+    stratify_param = y if stratify else None
+
     X_train, X_test, y_train, y_test = train_test_split(
         X,
         y,
         test_size=0.2,
         random_state=42,
-        stratify=y
+        stratify=stratify_param
     )
     return X_train, X_test, y_train, y_test
 
@@ -89,7 +98,7 @@ if __name__ == "__main__":
     X_test["PlacementStatus"] = y_test
 
     # ✅ Save into Placement-Prediction-System/data
-    save_dir = r"C:\Users\asolo\OneDrive\Documents\ML\Placement-Prediction-System\data"
+    save_dir = r"C:\Users\asolo\Documents\ML\Placement-Prediction-System\data"
     os.makedirs(save_dir, exist_ok=True)
 
     X_train.to_csv(os.path.join(save_dir, "preprocessed_train.csv"), index=False)
