@@ -1,76 +1,100 @@
+import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import joblib
 import os
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report
 
-def load_preprocessed_data():
-    # Go three levels up from src/ML_Models to reach project root
-    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    train_path = os.path.join(base_dir, "data", "preprocessed_train.csv")
-    test_path = os.path.join(base_dir, "data", "preprocessed_test.csv")
-
-    if not os.path.exists(train_path) or not os.path.exists(test_path):
-        raise FileNotFoundError(
-            f"Preprocessed files not found in {base_dir}/data. "
-            "Run preprocess.py first to generate them."
+def run_logistic_regression(csv_file_path=None, target_column=None):
+    # 1. Load or Generate Dataset
+    if csv_file_path and target_column:
+        print(f"Loading data from {csv_file_path}...")
+        df = pd.read_csv(csv_file_path)
+        X = df.drop(columns=[target_column])
+        y = df[target_column]
+    else:
+        print("Using synthetic dataset...")
+        from sklearn.datasets import make_classification
+        X, y = make_classification(
+            n_samples=1000,
+            n_features=5,
+            n_informative=3,
+            n_redundant=0,
+            random_state=42
         )
 
-    train_data = pd.read_csv(train_path)
-    test_data = pd.read_csv(test_path)
-    return train_data, test_data
+    # 2. Split into Train and Test Sets
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42, stratify=y
+    )
 
-def split_features_target(train_data, test_data):
-    x_train = train_data.drop(columns=["PlacementStatus"])
-    y_train = train_data["PlacementStatus"]
-    x_test = test_data.drop(columns=["PlacementStatus"])
-    y_test = test_data["PlacementStatus"]
-    return x_train, y_train, x_test, y_test
+    # 3. Feature Scaling
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
 
-def create_model():
-    return LogisticRegression(max_iter=1000)
+    # 4. Train the Model
+    model = LogisticRegression(max_iter=1000, random_state=42)
+    model.fit(X_train_scaled, y_train)
 
-def train_model(model, X_train, y_train):
-    model.fit(X_train, y_train)
-    return model
+    # 5. Evaluate the Model
+    y_pred = model.predict(X_test_scaled)
+    acc = accuracy_score(y_test, y_pred)
 
-def evaluate_model(model, X_test, y_test):
-    y_pred = model.predict(X_test)
-    print("\nAccuracy:")
-    print(model.score(X_test, y_test))
-    print("\nClassification Report:")
-    print(classification_report(y_test, y_pred))
+    print("\n" + "=" * 40)
+    print(f"Accuracy: {acc * 100:.2f}%")
+    print("=" * 40)
+    print("\nClassification Report:\n", classification_report(y_test, y_pred))
+    print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
 
-def save_model(model):
-    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    models_dir = os.path.join(base_dir, "models")
-    os.makedirs(models_dir, exist_ok=True)
-    model_path = os.path.join(models_dir, "logistic_regression.pkl")
+    # Confusion Matrix Heatmap
+    plt.figure(figsize=(6, 4))
+    cm = confusion_matrix(y_test, y_pred)
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues",
+                xticklabels=["Class 0", "Class 1"],
+                yticklabels=["Class 0", "Class 1"])
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    plt.title("Confusion Matrix")
+    plt.tight_layout()
+    plt.show()
+
+    # 6. Save Model and Scaler
+    model_path = r"C:\Users\asolo\Documents\ML\Placement-Prediction-System\data\logistic_regression_model.pkl"
+    scaler_path = r"C:\Users\asolo\Documents\ML\Placement-Prediction-System\data\scaler.pkl"
+    os.makedirs(os.path.dirname(model_path), exist_ok=True)
     joblib.dump(model, model_path)
-    print("\nModel saved successfully at:")
-    print(model_path)
+    joblib.dump(scaler, scaler_path)
+    print(f"\nModel saved at: {model_path}")
+    print(f"Scaler saved at: {scaler_path}")
 
-def load_model():
-    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    model_path = os.path.join(base_dir, "models", "logistic_regression.pkl")
-    if not os.path.exists(model_path):
-        raise FileNotFoundError("Saved model not found. Train and save it first.")
-    return joblib.load(model_path)
+    return model, scaler
+
+def load_model_and_scaler():
+    model_path = r"C:\Users\asolo\Documents\ML\Placement-Prediction-System\data\logistic_regression_model.pkl"
+    scaler_path = r"C:\Users\asolo\Documents\ML\Placement-Prediction-System\data\scaler.pkl"
+    if not os.path.exists(model_path) or not os.path.exists(scaler_path):
+        raise FileNotFoundError("Saved model or scaler not found. Train and save them first.")
+    model = joblib.load(model_path)
+    scaler = joblib.load(scaler_path)
+    return model, scaler
+
+def predict_new_sample(model, scaler, sample_df):
+    sample_scaled = scaler.transform(sample_df)
+    prediction = model.predict(sample_scaled)
+    print("\nPrediction for new sample:", prediction[0])
+    return prediction[0]
 
 if __name__ == "__main__":
-    train_data, test_data = load_preprocessed_data()
-    print("Training data shape:", train_data.shape)
-    print("Test data shape:", test_data.shape)
+    # Train and save
+    model, scaler = run_logistic_regression()
 
-    x_train, y_train, x_test, y_test = split_features_target(train_data, test_data)
-    print("\nX_train Shape:", x_train.shape)
-    print("y_train Shape:", y_train.shape)
-    print("X_test Shape:", x_test.shape)
-    print("y_test Shape:", y_test.shape)
-
-    model = create_model()
-    print("\nLogistic Regression Model created.")
-    model = train_model(model, x_train, y_train)
-    print("\nLogistic Regression Model trained.")
-    evaluate_model(model, x_test, y_test)
-    save_model(model)
+    # Reload and predict on a new sample
+    loaded_model, loaded_scaler = load_model_and_scaler()
+    new_sample = pd.DataFrame([[8.5, 1, 0, 0, 1]],
+                              columns=["CGPA", "Gender", "Stream", "Hostel", "HistoryOfBacklogs"])
+    predict_new_sample(loaded_model, loaded_scaler, new_sample)
