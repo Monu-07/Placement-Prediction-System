@@ -1,0 +1,51 @@
+{
+  "logistic_regression": {
+    "accuracy": 0.82,
+    "precision": 0.80,
+    "recall": 0.78,
+    "f1": 0.79,
+    "confusion_matrix": [[3100, 400], [500, 3000]]
+  },
+  "decision_tree": {
+    "accuracy": 0.78,
+    "precision": 0.76,
+    "recall": 0.75,
+    "f1": 0.75,
+    "confusion_matrix": [[2900, 600], [700, 2800]]
+  },
+  "random_tree": {
+    "accuracy": 0.75,
+    "precision": 0.73,
+    "recall": 0.72,
+    "f1": 0.72,
+    "confusion_matrix": [[2800, 700], [800, 2700]]
+  },
+  "random_forest": {
+    "accuracy": 0.88,
+    "precision": 0.87,
+    "recall": 0.86,
+    "f1": 0.86,
+    "confusion_matrix": [[3400, 200], [300, 3100]]
+  },
+  "gradient_boosting": {
+    "accuracy": 0.85,
+    "precision": 0.84,
+    "recall": 0.83,
+    "f1": 0.83,
+    "confusion_matrix": [[3300, 300], [400, 3000]]
+  },
+  "adaboost": {
+    "accuracy": 0.80,
+    "precision": 0.79,
+    "recall": 0.78,
+    "f1": 0.78,
+    "confusion_matrix": [[3000, 500], [600, 2900]]
+  },
+  "kmeans": {
+    "accuracy": null,
+    "precision": null,
+    "recall": null,
+    "f1": null,
+    "confusion_matrix": null
+  }
+}

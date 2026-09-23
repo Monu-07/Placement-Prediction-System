@@ -1,0 +1,45 @@
+{% extends "base.html" %} {% block content %}
+Data Preprocessing
+{% if data.error %}
+Couldn't run the preprocessing pipeline: {{ data.error }}
+
+{% else %}
+Before training, the raw dataset is cleaned and transformed into a purely numerical form that machine learning models can use. This page runs the same pipeline defined in src/data/preprocess.py and shows the result of each step.
+
+Raw Dataset {{ data.raw_shape[0] }} rows × {{ data.raw_shape[1] }} cols
+Train Split {{ data.split_train_shape[0] }} rows × {{ data.split_train_shape[1] }} cols
+Test Split {{ data.split_test_shape[0] }} rows × {{ data.split_test_shape[1] }} cols
+Final Train Shape {{ data.final_train_shape[0] }} rows × {{ data.final_train_shape[1] }} cols
+Pipeline Steps
+1
+Train / Test Split
+The dataset is split 80/20 (stratified on PlacementStatus) so the class balance is preserved in both sets. StudentID, Salary Package and IsAnomaly are dropped to avoid identifier noise and target leakage.
+
+2
+Missing Value Imputation
+Missing numerical values are filled with the column median using SimpleImputer, fit on the training set only and applied to both sets.
+
+3
+Standardization
+Numerical features are rescaled with StandardScaler so every column has mean 0 and unit variance, keeping large-magnitude features (like scores) from dominating smaller ones.
+
+4
+One-Hot Encoding
+Unordered categorical columns are expanded into binary indicator columns using OneHotEncoder.
+
+{% for f in data.one_hot_features %} {{ f }} {% endfor %}
+5
+Ordinal Encoding
+Columns with a natural order are mapped to integer ranks using OrdinalEncoder instead of one-hot encoding, keeping the ordering information intact.
+
+{% for f in data.ordinal_features %} {{ f }} {% endfor %}
+Detected Feature Types
+Numerical Features ({{ data.numerical_features|length }})
+{% for f in data.numerical_features %} {{ f }} {% endfor %}
+Categorical Features ({{ data.categorical_features|length }})
+{% for f in data.categorical_features %} {{ f }} {% endfor %}
+Preprocessed Data Preview
+First rows of the training set after every step above has been applied:
+
+{{ data.preview | safe }}
+{% endif %} {% endblock %}
